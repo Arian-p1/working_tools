@@ -8,13 +8,24 @@ local plugins = {
       vim.cmd([[colorscheme monokai-pro-classic]])
     end
   },
+  "tjdevries/colorbuddy.nvim",
+  {
+  'Tsuzat/NeoSolarized.nvim',
+  lazy = false, -- Ensure it loads during startup
+  priority = 1000, -- Load it before other plugins
+  config = function()
+    vim.cmd [[ colorscheme NeoSolarized ]]
+  end
+  },
   "sbdchd/neoformat",
+  "MunifTanjim/nui.nvim",
   "itchyny/vim-cursorword",
   "qpkorr/vim-bufkill",
   "mg979/vim-visual-multi",
   "williamboman/mason.nvim",
   "williamboman/mason-lspconfig.nvim",
   "neovim/nvim-lspconfig",
+  "kethku/vim-floaterm",
   "tamago324/nlsp-settings.nvim",
   {
     'windwp/nvim-autopairs',
@@ -151,7 +162,19 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 require("lazy").setup(plugins, opts)
 require("mason").setup()
-require("mason-lspconfig").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    "rust_analyzer",
+    "bashls",
+    "cssls",
+    "gopls",
+    "html",
+    "htmx",
+    "pyright",
+    "tailwindcss",
+    "templ"
+  },
+})
 require("dapui").setup()
 require("neodev").setup({
   library = {
@@ -587,3 +610,40 @@ vim.api.nvim_set_keymap("i", "<C-e>", "<Plug>luasnip-next-choice", {})
 vim.api.nvim_set_keymap("s", "<C-e>", "<Plug>luasnip-next-choice", {})
 
 vim.filetype.add({ extension = { templ = "templ" } })
+
+
+
+local ok_status, NeoSolarized = pcall(require, "NeoSolarized")
+
+if not ok_status then
+  return
+end
+
+NeoSolarized.setup {
+  style = "dark", -- or "light"
+  transparent = false,
+  terminal_colors = true, -- Configure terminal colors
+  enable_italics = true, -- Enable italics
+  styles = {
+    comments = { italic = true },
+    keywords = { italic = true },
+    functions = { bold = true },
+    variables = {},
+    string = { italic = true },
+    underline = true, -- Global underline
+    undercurl = true, -- Global undercurl
+  },
+  on_highlights = function(highlights, colors)
+    -- Custom highlights
+  end,
+}
+
+vim.cmd [[
+   try
+        colorscheme NeoSolarized
+    catch /^Vim\%((\a\+)\)\=:E185/
+        colorscheme default
+        set background=dark
+    endtry
+]]
+

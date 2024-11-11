@@ -94,6 +94,7 @@ noremap <Space>d :Telescope diagnostics <cr>
 noremap <Space>r :Telescope lsp_references <cr>
 noremap <Space>m :Telescope marks <CR>
 noremap <Space>s :Telescope live_grep <cr>
+noremap <Space>g :Gitsigns preview_hunk <cr>
 nnoremap <silent>L :BufferLineCycleNext<CR>
 nnoremap <silent>H :BufferLineCyclePrev<CR>
 noremap <C-s> :split<cr>
